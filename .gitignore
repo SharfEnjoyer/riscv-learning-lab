@@ -1,0 +1,12 @@
+build/
+results/
+trash/
+*.vcd
+*.fst
+*.json
+*.bit
+*.rpt
+*.out
+.Xil/
+*.jou
+*.log

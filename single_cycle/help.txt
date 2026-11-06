@@ -1,0 +1,22 @@
+ki@fedora:~$ cd Documents/RISC-V/single_cycle/
+ki@fedora:~/Documents/RISC-V/single_cycle$ ls
+alu.sv  build  control.sv  datafile.sv  dump.vcd  instrfile.sv  trash
+a.out   code   cpu_tb.sv   datapath.sv  inst.py   regfile.sv
+ki@fedora:~/Documents/RISC-V/single_cycle$ iverilog -g2005-sv -Wall datapath.sv control.sv instrfile.sv datafile.sv regfile.sv alu.sv cpu_tb.sv 
+datapath.sv:159: warning: System task ($display) cannot be synthesized in an always_comb process.
+datapath.sv:121: warning: System task ($display) cannot be synthesized in an always_comb process.
+datapath.sv:72: warning: System task ($display) cannot be synthesized in an always_comb process.
+control.sv:71: warning: System task ($display) cannot be synthesized in an always_comb process.
+ki@fedora:~/Documents/RISC-V/single_cycle$ ./a.out 
+Simulation Complete
+VCD info: dumpfile dump.vcd opened for output.
+cpu_tb.sv:25: $finish called at 0 (1s)
+hihihihi
+ahaha
+hrhrhhr
+ahaha
+ki@fedora:~/Documents/RISC-V/single_cycle$ 
+
+
+radare2
+surfer
