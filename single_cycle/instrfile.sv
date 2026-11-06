@@ -5,7 +5,7 @@ module instrfile(
     output logic [31:0] Rd1
 );
 
-    logic [31:0] data [4:0];
+    logic [31:0] data [32];
     //assign data[0] = 32'h01498933;
     assign data[0] = 32'h06400293;
     assign data[1] = 32'h03200313;

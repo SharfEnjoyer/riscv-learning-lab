@@ -10,7 +10,7 @@ module regfile(
     output logic [31:0] Rd2
 );
 
-    logic [31:0] data [4:0];
+    logic [31:0] data [32];
 
     assign Rd1 = data[Adr1];
     assign Rd2 = data[Adr2];
