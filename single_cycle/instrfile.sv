@@ -10,6 +10,7 @@ module instrfile(
     assign data[0] = 32'h06400293;
     assign data[1] = 32'h03200313;
     assign data[2] = 32'h406283b3;
+    assign data[3] = 32'h3fd50000;
 
     assign Rd1 = data[Adr1];
 

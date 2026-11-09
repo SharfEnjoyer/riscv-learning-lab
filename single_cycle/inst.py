@@ -1,4 +1,4 @@
-# inst.py — пример
+# inst.py — example
 import re, sys, pathlib
 name = sys.argv[1]
 txt = pathlib.Path(f"{name}.sv").read_text()

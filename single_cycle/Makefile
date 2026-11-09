@@ -8,7 +8,7 @@ MODULES ?= datapath.sv \
 
 OUT     ?= build/a.out
 IVERILOG ?= iverilog
-FLAGS   ?= -g2012 -Wall
+FLAGS   ?= -g2005-sv -Wall
 
 .PHONY: tb build clean
 
