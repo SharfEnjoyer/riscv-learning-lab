@@ -59,9 +59,9 @@ module control(
             7'b110_0011: begin // B-type
                 PCsrc = zero ? 1 : 0;
                 Regwr = 0;
-                Immsrc = 2'b10; // 13 bit
-                ALUsrc = 1;
-                ALUop = 3'b000;
+                Immsrc = 2'b01; // 12 bit
+                ALUsrc = 0;
+                ALUop = 3'b001;
             end
             7'b110_1111: begin // J-type
                 PCsrc = 1;

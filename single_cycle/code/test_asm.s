@@ -6,5 +6,8 @@ _start:
 	addi x5, x0, 100
 	addi x6, x0, 50
 	sub  x7, x5, x6
-    jal _start  # jump to _start and save position to ra
+    beq  x6, x7, _start
+    #jal _start
+	
+	
     

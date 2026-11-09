@@ -7,7 +7,7 @@ module datafile(
     output logic [31:0] Rd1
 );
 
-    logic [31:0] data [32];
+    logic [31:0] data [128];
 
     assign Rd1 = data[Adr1];
     

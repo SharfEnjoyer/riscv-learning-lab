@@ -9,7 +9,7 @@ module datapath(
     logic PCsrc; 
     logic [31:0] instr;
 
-    assign PCp4 = PCNext + 1;
+    assign PCp4 = PCNext + 4;
 
     always @(posedge clk or posedge rst) begin
         if (rst)
@@ -115,9 +115,9 @@ module datapath(
     //imm func
     always_comb begin
         case(Immsrc)
-            2'b00: imm = {'0, imm_i};
-            2'b01: imm = {'0, imm_b};
-            2'b10: imm = {'0, imm_j};
+            2'b00: imm = $signed(imm_i);
+            2'b01: imm = $signed(imm_b);
+            2'b10: imm = $signed(imm_j);
             default: $display("hihihihi");
         endcase
     end
