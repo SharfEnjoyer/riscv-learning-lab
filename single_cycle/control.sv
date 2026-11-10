@@ -66,7 +66,7 @@ module control(
             end
             7'b110_0011: begin // B-type
                 PCsrc = zero ? 1 : 0;
-                Immsrc = 2'b01; // 12 bit
+                Immsrc = 2'b10; // 12 bit
                 ALUsrc = 0;
                 ALUop = 3'b001;
 

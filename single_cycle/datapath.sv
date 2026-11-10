@@ -45,29 +45,52 @@ module datapath(
             case(opcode)
                 7'b011_0011: begin // R-type
                     {funct7, rs2, rs1, funct3, rd} = payload;
-
+                    
+                    imm_i = '0;
+                    imm_b[12:1] = '0;
+                    imm_j = '0;
                 end
                 7'b000_0011: begin // I-type load instr 
                     {imm_i, rs1, funct3, rd} = payload;
-                
+                    
+                    rs2 = '0;
+                    funct7 = '0;
+                    imm_b[12:1] = '0;
+                    imm_j = '0;
                 end
                 7'b001_0011: begin // I-type math instr 
                     {imm_i, rs1, funct3, rd} = payload;
-
+                    
+                    rs2 = '0;
+                    funct7 = '0;
+                    imm_b[12:1] = '0;
+                    imm_j = '0;
                 end
                 7'b010_0011: begin // S-type 
                     {imm_i[11:5], rs2, rs1, 
                     funct3, imm_i[4:0]} = payload;
                 
+                    funct7 = '0;
+                    imm_b[12:1] = '0;
+                    imm_j = '0;
                 end
                 7'b110_0011: begin // B-type
                     {imm_b[12], imm_b[10:5], rs2, rs1, 
                     funct3, imm_b[4:1], imm_b[11]} = payload;
                     
+                    funct7 = '0;
+                    imm_i = '0;
+                    imm_j = '0;
                 end
                 7'b110_1111: begin // J-type 
                     {imm_j[20], imm_j[10:1], imm_j[11], imm_j[19:12], rd} = payload;
                     imm_j[0] = 1'b0;
+
+                    rs2 = '0;
+                    funct7 = '0;
+                    funct3 = '0;
+                    imm_i = '0;
+                    imm_b[12:1] = '0;
                 end
                 default: ;
             endcase
@@ -116,8 +139,8 @@ module datapath(
     always_comb begin
         case(Immsrc)
             2'b00: imm = $signed(imm_i);
-            2'b01: imm = $signed(imm_b);
-            2'b10: imm = $signed(imm_j);
+            2'b10: imm = $signed(imm_b);
+            2'b11: imm = $signed(imm_j);
             default: $display("hihihihi");
         endcase
     end
