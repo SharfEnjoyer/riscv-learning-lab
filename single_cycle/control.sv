@@ -26,6 +26,9 @@ module control(
                     3'b110: ALUop = 3'b011;
                     3'b111: ALUop = 3'b010;
                 endcase
+
+                Immsrc = '0; //x doesn't matter
+                Memwr = '0;  //x doesn't matter
             end
             7'b000_0011: begin // I-type load instr 
                 PCsrc = 0;
@@ -34,6 +37,7 @@ module control(
                 ALUsrc = 1;
                 Ressrc = 2'b01;
 
+                Memwr = '0;  //x doesn't matter
             end
             7'b001_0011: begin // I-type math instr 
                 PCsrc = 0;
@@ -47,26 +51,36 @@ module control(
                     3'b110: ALUop = 3'b011;
                     3'b111: ALUop = 3'b010;
                 endcase
+
+                Memwr = '0;  //x doesn't matter
             end
             7'b010_0011: begin // S-type 
                 PCsrc = 0;
-                Regwr = 0;
-                Immsrc = 2'b01; // 12 bit
+                Immsrc = 2'b00; // 12 bit
                 ALUsrc = 1;
                 Memwr =  1; 
                 ALUop = 3'b000;
+
+                Regwr = 0; // x
+                Ressrc = '0; //x 
             end
             7'b110_0011: begin // B-type
                 PCsrc = zero ? 1 : 0;
-                Regwr = 0;
                 Immsrc = 2'b01; // 12 bit
                 ALUsrc = 0;
                 ALUop = 3'b001;
+
+                Regwr = 0; // x
+                Memwr =  '0; // x
+                Ressrc = 2'b00; // x
             end
             7'b110_1111: begin // J-type
                 PCsrc = 1;
                 Regwr = 1;
                 Immsrc = 2'b11; // 20 bit
+
+                Memwr =  '0; // x
+                Ressrc = '0; // x
             end
             default: $display("ahaha");
         endcase

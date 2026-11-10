@@ -3,9 +3,9 @@ module datapath(
     input rst
 );
 
-    logic [4:0] PCNext;
-    logic [4:0] PCp4;
-    logic [4:0] PCtarget;
+    logic [31:0] PCNext;
+    logic [31:0] PCp4;
+    logic [31:0] PCtarget;
     logic PCsrc; 
     logic [31:0] instr;
 
@@ -145,7 +145,7 @@ module datapath(
 
     datafile uut_datafile (
         .Adr1(Result),
-        .Wr1(SrcB),
+        .Wr1(Rd2),
         .WrEn(Memwr),
         .clk(clk),
         .Rd1(data_res)
