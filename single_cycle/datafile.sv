@@ -12,7 +12,6 @@ module datafile(
     assign Rd1 = data[Adr1];
     
     always_ff@(posedge clk) begin
-        //data[Adr1] <= WrEn ? Wr1 : data[Adr1];
         {data[Adr1 + 3], data[Adr1 + 2], data[Adr1 + 1], data[Adr1]} <= WrEn ? Wr1 : {data[Adr1 + 3], data[Adr1 + 2], data[Adr1 + 1], data[Adr1]};
     end
 endmodule

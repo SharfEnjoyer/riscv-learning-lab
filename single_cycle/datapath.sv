@@ -18,7 +18,7 @@ module datapath(
             PCNext <= PCsrc ? PCtarget : PCp4;
     end
 
-    instrfile uut_instrfile (
+    instrfile instrfile (
         .Adr1(PCNext),
         .clk(clk),
         .Rd1(instr)
@@ -106,7 +106,7 @@ module datapath(
     logic [1:0] Ressrc;
 
 
-    control uut_control (
+    control control (
     .opcode(opcode),
     .funct3(funct3),
     .funct7(funct7),
@@ -124,7 +124,7 @@ module datapath(
     logic [31:0] Rd1;
     logic [31:0] Rd2;
 
-    regfile uut_regfile (
+    regfile regfile (
     .Adr1(rs1),
     .Adr2(rs2),
     .Adr3(rd),
@@ -156,7 +156,7 @@ module datapath(
     assign SrcA = Rd1;
 
 
-    alu uut_alu (
+    alu alu (
         .SrcA(SrcA),
         .SrcB(SrcB),
         .Control(ALUop),
@@ -166,7 +166,7 @@ module datapath(
 
     logic [31:0] data_res;
 
-    datafile uut_datafile (
+    datafile datafile (
         .Adr1(Result),
         .Wr1(Rd2),
         .WrEn(Memwr),
