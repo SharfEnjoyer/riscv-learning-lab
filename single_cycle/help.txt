@@ -1,8 +1,0 @@
-make or (iverilog -g2005-sv -Wall datapath.sv control.sv instrfile.sv datafile.sv regfile.sv alu.sv cpu_tb.sv
-./a.out)
-
-riscv-none-elf-gcc -c test_asm.s
-riscv-none-elf-objdump -S test_asm.o
-
-radare2
-surfer
