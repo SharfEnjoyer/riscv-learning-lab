@@ -1,4 +1,4 @@
-TB      ?= cpu_tb.sv
+TB      ?= ../tb/cpu_tb.sv
 MODULES ?= datapath.sv \
 			control.sv \
 			alu.sv \
@@ -9,18 +9,19 @@ MODULES ?= datapath.sv \
 OUT     ?= build/a.out
 IVERILOG ?= iverilog
 FLAGS   ?= -g2005-sv -Wall
+BUILD 	?= build
 
 .PHONY: tb build clean
 
 tb: run
 
-build: | $(BUILD)
+build: | build_dec
 	$(IVERILOG) $(FLAGS) -o $(OUT) $(TB) $(MODULES)
 
-run: build
-	cd build && vvp a.out
+run: | build
+	cd $(BUILD) && vvp a.out
 
-$(BUILD):
+build_dec:
 	mkdir -p $(BUILD)
 
 clean:
