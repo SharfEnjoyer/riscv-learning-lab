@@ -1,4 +1,4 @@
-module cpu_tb;
+module single_cycle_tb;
 
 logic clk;
 logic rst;
@@ -13,7 +13,7 @@ always #50 clk = ~clk;
 
 initial begin
     $dumpfile("tb.vcd");
-    $dumpvars(0, cpu_tb);
+    $dumpvars(0, single_cycle_tb);
 end
 
 

@@ -1,4 +1,4 @@
-TB      ?= ../tb/cpu_tb.sv
+TB      ?= ../tb/single_cycle_tb.sv
 MODULES ?= datapath.sv \
 			control.sv \
 			alu.sv \

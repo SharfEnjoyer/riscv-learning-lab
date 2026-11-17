@@ -82,7 +82,6 @@ module control(
                 Memwr =  '0; // x
                 Ressrc = '0; // x
             end
-            default: $display("ahaha");
         endcase
     end
     
