@@ -9,7 +9,6 @@ module datapath(
 
     logic [31:0] next_pc;
     logic [31:0] jump_pc;
-    logic pc_src; 
     logic wr_pc; 
 
     
@@ -18,7 +17,7 @@ module datapath(
             next_pc <= 0;
         else 
             if(wr_pc)
-                next_pc <= pc_src ? jump_pc : rslt_data;
+                next_pc <= rslt_data;
     end
 
     logic wr_mem;
@@ -159,7 +158,6 @@ module datapath(
         .zero(zero),
         .clk(clk),
         .rst(rst),
-        .src_pc(pc_src),
         .wr_pc(wr_pc),
         .wr_mem(wr_mem),
         .src_mem(src_mem),

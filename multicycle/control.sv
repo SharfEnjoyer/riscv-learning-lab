@@ -6,7 +6,6 @@ module control(
     input              clk,
     input              rst,
 
-    output logic       src_pc,
     output logic       wr_pc, 
     output logic       wr_mem,
     output logic       src_mem, // source of mem addres
@@ -52,7 +51,7 @@ module control(
         fetch_A = 0;
         case (state)
             fetch: begin
-                src_pc   = 0;
+                
                 wr_pc    = 1;
                 wr_mem   = 0;
                 src_mem  = 0;
@@ -67,14 +66,13 @@ module control(
                 next_state = decode;
             end
             decode: begin
-                src_pc   = 0;
                 wr_pc    = 0;
                 wr_mem   = 0;
                 src_mem  = 0;
                 wr_reg   = 0;
                 src_imm  = 2'b11;
-                src_a    = 2'b00;
-                src_b    = 2'b10; 
+                src_a    = 2'b01;
+                src_b    = 2'b01; 
                 alu_op   = 3'b000;
                 src_res  = 2'b00;
                 case (opcode)
@@ -88,7 +86,6 @@ module control(
                 endcase
             end   
             mem_addr: begin
-                src_pc   = 0;
                 wr_pc    = 0;
                 wr_mem   = 0;
                 src_mem  = 0;
@@ -105,7 +102,6 @@ module control(
                     next_state = mem_store;
             end 
             mem_load: begin
-                src_pc   = 0;
                 wr_pc    = 0;
                 wr_mem   = 0;
                 src_mem  = 1;
@@ -119,7 +115,6 @@ module control(
                 next_state = mem_reg;
             end
             mem_reg: begin
-                src_pc   = 0;
                 wr_pc    = 0;
                 wr_mem   = 0;
                 src_mem  = 0;
@@ -133,7 +128,6 @@ module control(
                 next_state = fetch;
             end  
             mem_store: begin
-                src_pc   = 0;
                 wr_pc    = 0;
                 wr_mem   = 1;
                 src_mem  = 1;
@@ -147,7 +141,6 @@ module control(
                 next_state = fetch;
             end
             bran_addr: begin
-                src_pc   = 0;
                 wr_pc    = 0;
                 wr_mem   = 0;
                 src_mem  = 0;
@@ -161,7 +154,6 @@ module control(
                 next_state = bran_cond;
             end
             bran_cond: begin
-                src_pc   = 0;
                 wr_pc    = zero;
                 wr_mem   = 0;
                 src_mem  = 0;
@@ -175,7 +167,6 @@ module control(
                 next_state = fetch;
             end
             jump_addr: begin
-                src_pc   = 1;
                 wr_pc    = 1;
                 wr_mem   = 0;
                 src_mem  = 0;
@@ -189,7 +180,6 @@ module control(
                 next_state = store_reg;
             end
             r_type: begin
-                src_pc   = 0;
                 wr_pc    = 0;
                 wr_mem   = 0;
                 src_mem  = 0;
@@ -211,7 +201,6 @@ module control(
 
             end
             i_type: begin
-                src_pc   = 0;
                 wr_pc    = 0;
                 wr_mem   = 0;
                 src_mem  = 0;
@@ -232,7 +221,6 @@ module control(
                 next_state = store_reg;
             end  
             store_reg: begin
-                src_pc   = 0;
                 wr_pc    = 0;
                 wr_mem   = 0;
                 src_mem  = 0;

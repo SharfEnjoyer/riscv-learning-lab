@@ -30,7 +30,7 @@ module datafile(
         instr_adr = instr_adr + 4;
         {data[instr_adr + 3], data[instr_adr + 2], data[instr_adr + 1], data[instr_adr + 0]} = 32'h005303b3;
         instr_adr = instr_adr + 4;
-        {data[instr_adr + 3], data[instr_adr + 2], data[instr_adr + 1], data[instr_adr + 0]} = 32'hfe1ff36f;
+        {data[instr_adr + 3], data[instr_adr + 2], data[instr_adr + 1], data[instr_adr + 0]} = 32'hfe9ff36f;
     end
 
 
