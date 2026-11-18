@@ -26,7 +26,7 @@ initial begin
     repeat(1) @(posedge clk);
     rst = 0;
 
-    repeat(30) @(posedge clk);
+    repeat(60) @(posedge clk);
 
     $display("Simulation Complete");
     $finish;

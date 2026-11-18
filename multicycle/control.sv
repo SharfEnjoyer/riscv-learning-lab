@@ -15,6 +15,7 @@ module control(
     output logic [1:0] src_a,  
     output logic [1:0] src_b,  
     output logic [2:0] alu_op, 
+    output logic fetch_A, 
     output logic [1:0] src_res 
 );
  
@@ -37,8 +38,8 @@ module control(
 
 
 
-    logic state;
-    logic next_state;
+    logic [7:0] state;
+    logic [7:0] next_state;
 
     always @(posedge clk or posedge rst) begin
         if(rst)
@@ -48,6 +49,7 @@ module control(
     end
 
     always_comb begin
+        fetch_A = 0;
         case (state)
             fetch: begin
                 src_pc   = 0;
@@ -59,7 +61,8 @@ module control(
                 src_a    = 2'b00;
                 src_b    = 2'b10; 
                 alu_op   = 3'b000;
-                src_res  = 2'b00;
+                src_res  = 2'b10;
+                fetch_A = 1;
 
                 next_state = decode;
             end
@@ -69,9 +72,9 @@ module control(
                 wr_mem   = 0;
                 src_mem  = 0;
                 wr_reg   = 0;
-                src_imm  = 2'b00;
+                src_imm  = 2'b11;
                 src_a    = 2'b00;
-                src_b    = 2'b00; 
+                src_b    = 2'b10; 
                 alu_op   = 3'b000;
                 src_res  = 2'b00;
                 case (opcode)
@@ -172,15 +175,15 @@ module control(
                 next_state = fetch;
             end
             jump_addr: begin
-                src_pc   = 0;
-                wr_pc    = zero;
+                src_pc   = 1;
+                wr_pc    = 1;
                 wr_mem   = 0;
                 src_mem  = 0;
                 wr_reg   = 0;
                 src_imm  = 2'b00;
-                src_a    = 2'b10;
-                src_b    = 2'b00;
-                alu_op   = 3'b001;
+                src_a    = 2'b01;
+                src_b    = 2'b10;
+                alu_op   = 3'b000;
                 src_res  = 2'b00;
 
                 next_state = store_reg;
@@ -215,7 +218,7 @@ module control(
                 wr_reg   = 0;
                 src_imm  = 2'b00;
                 src_a    = 2'b10;
-                src_b    = 2'b00;
+                src_b    = 2'b01;
 
                 case(funct3)
                     3'b000: alu_op = 3'b000;

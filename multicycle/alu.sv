@@ -16,7 +16,6 @@ module alu(
             3'b101: Result = SrcA < SrcB;
             3'b011: Result = SrcA | SrcB;
             3'b010: Result = SrcA & SrcB;
-            default: Result = '0;
         endcase
     end
 

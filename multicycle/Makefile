@@ -3,7 +3,6 @@ MODULES ?= datapath.sv \
 			control.sv \
 			alu.sv \
 			regfile.sv \
-			instrfile.sv \
 			datafile.sv
 
 OUT     ?= build/a.out

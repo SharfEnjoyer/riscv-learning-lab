@@ -3,39 +3,64 @@ module datapath(
     input rst
 );
 
-
-
-    logic [31:0] PCNext;
-    logic [31:0] PCp4;
-    logic [31:0] PCtarget;
-    logic PCsrc; 
-    logic [31:0] instr;
-    logic [31:0] instr_q;
-
-
     // fetch state
 
-    //todo: assign PCp4 = PCNext + 4 througth alu 
+    logic [31:0] rslt_data;
+
+    logic [31:0] next_pc;
+    logic [31:0] jump_pc;
+    logic pc_src; 
+    logic wr_pc; 
+
     
     always @(posedge clk or posedge rst) begin
         if (rst)
-            PCNext <= '0;
+            next_pc <= 0;
         else 
-            PCNext <= PCsrc ? PCtarget : PCp4;
+            if(wr_pc)
+                next_pc <= pc_src ? jump_pc : rslt_data;
     end
 
-    //todo: one solide data/instruction memmory 
-    instrfile instrfile (
-        .Adr1(PCNext),
+    logic wr_mem;
+    logic src_mem;
+    logic [31:0] mem_adr;
+    logic [31:0] wr_mem_data;
+
+    logic [31:0] data_res;
+    logic [31:0] data_res_q;
+
+    assign mem_adr = src_mem ? rslt_data : next_pc;
+
+    datafile datafile (
+        .Adr1(mem_adr),
+        .Wr1(wr_mem_data),
+        .WrEn(wr_mem),
         .clk(clk),
-        .Rd1(instr)
+        .Rd1(data_res)
     );
 
-    always @(posedge clk or posedge rst) begin
-        if (rst)
-            instr_q <= 0;
-        else
+
+
+    logic [31:0] instr;
+    logic [31:0] instr_q;
+    logic [31:0] old_pc;
+    logic fetch;
+
+    assign instr = data_res;
+
+    always @(posedge clk or posedge rst) begin : fetch_reg
+        if (rst) begin
+            old_pc   <= 0;
+            instr_q  <= 0;
+            data_res_q <= 0;
+        end
+        else begin
+            if (fetch) begin
+            old_pc  <= next_pc;
             instr_q <= instr;
+            end
+            data_res_q <= data_res;
+        end
     end
 
     // decode state
@@ -120,12 +145,9 @@ module datapath(
     logic Regwr;
     logic [1:0] Immsrc;
     logic [2:0] ALUop;
-    logic Memwr;
     logic [1:0] Ressrc;
 
     //new
-    logic wr_pc;
-    logic src_mem;
     logic [1:0] src_a;
     logic [1:0] src_b;
 
@@ -137,21 +159,20 @@ module datapath(
         .zero(zero),
         .clk(clk),
         .rst(rst),
-        .src_pc(PCsrc),
+        .src_pc(pc_src),
         .wr_pc(wr_pc),
-        .wr_mem(Memwr),
+        .wr_mem(wr_mem),
         .src_mem(src_mem),
         .wr_reg(Regwr),
         .src_imm(Immsrc),
         .src_a(src_a),
         .src_b(src_b),
         .alu_op(ALUop),
+        .fetch_A(fetch),
         .src_res(Ressrc)
     );
 
 
-    logic [31:0] Wr3;
-    logic [31:0] Wr3_q; // not used
     logic [31:0] Rd1;
     logic [31:0] Rd1_q;
     logic [31:0] Rd2;
@@ -161,7 +182,7 @@ module datapath(
     .Adr1(rs1),
     .Adr2(rs2),
     .Adr3(rd),
-    .Wr3(Wr3),
+    .Wr3(rslt_data),
     .WrEn(Regwr),
     .clk(clk),
     .Rd1(Rd1),
@@ -170,14 +191,16 @@ module datapath(
 
     always_ff @( posedge clk or posedge rst ) begin : regfile_reg
         if (rst) begin
-            Rd1_q = '0; 
-            Rd2_q = '0;
+            Rd1_q <= '0; 
+            Rd2_q <= '0;
         end
         else begin
-            Rd1_q = Rd1; 
-            Rd2_q = Rd2;
+            Rd1_q <= Rd1; 
+            Rd2_q <= Rd2;
         end
     end
+
+    assign wr_mem_data = Rd2_q;
 
     //imm func
     always_comb begin
@@ -189,51 +212,52 @@ module datapath(
         endcase
     end
     
+    assign jump_pc = imm;
+
     // alu state
 
-    //assign PCtarget = PCNext +  imm; todo: alu addition 
+    logic [31:0] scr_a_data;
+    logic [31:0] scr_b_data;
+    logic [31:0] alu_res;
+    logic [31:0] alu_res_q;
 
-    logic [31:0] SrcA;
-    logic [31:0] SrcB;
-    logic [31:0] Result;
-    logic [31:0] Result_Q;
+    always_comb begin : src_a_mux
+       case (src_a)
+        2'b00: scr_a_data = next_pc;
+        2'b01: scr_a_data = old_pc; 
+        2'b10: scr_a_data = Rd1_q;
+       endcase 
+    end
 
-    assign SrcB = src_b ? imm : Rd2;
-    assign SrcA = Rd1;
+    always_comb begin : src_b_mux
+        case (src_b)
+        2'b00: scr_b_data = Rd2_q;
+        2'b01: scr_b_data = imm; 
+        2'b10: scr_b_data = 32'd4;
+       endcase 
+    end
 
 
     alu alu (
-        .SrcA(SrcA),
-        .SrcB(SrcB),
+        .SrcA(scr_a_data),
+        .SrcB(scr_b_data),
         .Control(ALUop),
-        .Result(Result),
+        .Result(alu_res),
         .zero(zero)
     );
 
-    // logic [31:0] data_res;
-
-    // datafile datafile (
-    //     .Adr1(Result),
-    //     .Wr1(Rd2),
-    //     .WrEn(Memwr),
-    //     .clk(clk),
-    //     .Rd1(data_res)
-    // );
-
-    logic Result_q;
-
     always_ff @(posedge clk or posedge rst) begin : alu_out_reg 
         if(rst)
-            Result_q <= '0;
+            alu_res_q <= '0;
         else
-            Result_q <= Result;
+            alu_res_q <= alu_res;
     end
 
-    always_comb begin
+    always_comb begin : result_mux 
         case (Ressrc)
-            2'b00: Wr3 = Result_Q;
-            2'b01: Wr3 = data_res;
-            2'b10: Wr3 = PCp4;
+            2'b00: rslt_data = alu_res_q;
+            2'b01: rslt_data = data_res_q;
+            2'b10: rslt_data = alu_res;
             default: $display("hrhrhhr");
         endcase
     end
